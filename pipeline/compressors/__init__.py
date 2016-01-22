@@ -253,7 +253,7 @@ class CompressorBase(object):
 
 
 class SubProcessCompressor(CompressorBase):
-    def execute_command(self, command, content):
+    def execute_command(self, command, content=None, **kwargs):
         argument_list = []
         for flattening_arg in command:
             if isinstance(flattening_arg, string_types):
@@ -263,7 +263,7 @@ class SubProcessCompressor(CompressorBase):
         stdin = subprocess.PIPE if content else None
 
         pipe = subprocess.Popen(argument_list, stdout=subprocess.PIPE,
-                                stdin=stdin, stderr=subprocess.PIPE)
+                                stdin=stdin, stderr=subprocess.PIPE, **kwargs)
         if content:
             content = smart_bytes(content)
         stdout, stderr = pipe.communicate(content)
