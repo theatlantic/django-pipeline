@@ -8,19 +8,7 @@ from django.contrib.staticfiles.storage import staticfiles_storage
 
 from pipeline.conf import settings
 from pipeline.compressors import SubProcessCompressor
-
-
-source_map_re = re.compile((
-    "(?:"
-      "/\\*"
-      "(?:\\s*\r?\n(?://)?)?"
-      "(?:%(inner)s)"
-      "\\s*"
-      "\\*/"
-      "|"
-      "//(?:%(inner)s)"
-    ")"
-    "\\s*$") % {'inner': r"""[#@] sourceMappingURL=([^\s'"]*)"""})
+from pipeline.utils import source_map_re
 
 
 class ClosureCompressor(SubProcessCompressor):
