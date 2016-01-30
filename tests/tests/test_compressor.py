@@ -250,6 +250,11 @@ class CompressorImplementationTest(TestCase):
             'css', 'pipeline/compressors/cssmin.css')
 
     @skipUnless(settings.HAS_NODE, "requires node")
+    def test_cssclean(self):
+        self._test_compressor('pipeline.compressors.cleancss.CleanCSSCompressor',
+            'css', 'pipeline/compressors/cleancss.css')
+
+    @skipUnless(settings.HAS_NODE, "requires node")
     @skipUnless(settings.HAS_JAVA, "requires java")
     def test_closure(self):
         self._test_compressor('pipeline.compressors.closure.ClosureCompressor',
@@ -271,5 +276,4 @@ class CompressorImplementationTest(TestCase):
     def test_csstidy(self):
         self._test_compressor('pipeline.compressors.csstidy.CSSTidyCompressor',
             'css', 'pipeline/compressors/csstidy.css')
-
 
