@@ -24,20 +24,19 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.auth',
     'django.contrib.admin',
+    'django.contrib.messages',  # Req'd, Django 2.2
     'pipeline',
     'tests.tests'
 ]
 
-MIDDLEWARE_CLASSES = (
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware'
-)
-
 ROOT_URLCONF = 'tests.urls'
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE = (
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware'
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',    # Req'd, Django 2.2
 )
 
 MEDIA_URL = '/media/'
@@ -125,7 +124,7 @@ PIPELINE = {
 NODE_MODULES_PATH = local_path('../node_modules')
 NODE_BIN_PATH = os.path.join(NODE_MODULES_PATH, '.bin')
 NODE_EXE_PATH = distutils.spawn.find_executable('node')
-JAVA_EXE_PATH = distutils.spawn.find_executable('java')
+JAVA_EXE_PATH = not bool(os.getenv('PIPELINE_SKIP_JAVA')) and distutils.spawn.find_executable('java')
 CSSTIDY_EXE_PATH = distutils.spawn.find_executable('csstidy')
 HAS_NODE = bool(NODE_EXE_PATH)
 HAS_JAVA = bool(JAVA_EXE_PATH)
@@ -165,20 +164,25 @@ if HAS_NODE and HAS_JAVA:
 if HAS_CSSTIDY:
     PIPELINE.update({'CSSTIDY_BINARY': CSSTIDY_EXE_PATH})
 
-TEMPLATE_DIRS = (
-    local_path('templates'),
-)
+_TEMPLATE_DIRS = [local_path('templates')]
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'APP_DIRS': True,
-        'DIRS': TEMPLATE_DIRS,
+        'DIRS': _TEMPLATE_DIRS,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',  # Req'd, Django 2.2
+            ]
+        }
     },
     {
         'BACKEND': 'django.template.backends.jinja2.Jinja2',
         'APP_DIRS': True,
-        'DIRS': TEMPLATE_DIRS,
+        'DIRS': _TEMPLATE_DIRS,
         'OPTIONS': {
             'extensions': ['pipeline.jinja2.PipelineExtension']
         }

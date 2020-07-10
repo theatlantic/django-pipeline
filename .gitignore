@@ -18,6 +18,7 @@ tests/node_modules/
 .DS_Store
 .idea
 .venv
+venv/
 .project
 .pydevproject
 .ropeproject
@@ -27,3 +28,5 @@ tests/npm-cache
 django-pipeline-*/
 .tags
 node_modules/
+.python-version
+package-lock.json

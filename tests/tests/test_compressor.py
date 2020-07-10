@@ -11,7 +11,7 @@ try:
 except ImportError:
     from unittest.mock import patch  # noqa
 
-from unittest import skipIf, skipUnless
+from unittest import skipIf, skipUnless, skip
 
 from django.conf import settings
 from django.test import TestCase
@@ -234,7 +234,7 @@ class CompressorImplementationTest(TestCase):
         self._test_compressor('pipeline.compressors.uglifyjs.UglifyJSCompressor',
             'js', 'pipeline/compressors/uglifyjs.js')
 
-    @skipUnless(settings.HAS_NODE, "requires node")
+    @skip("don't care")
     def test_yuglify_js(self):
         self._test_compressor('pipeline.compressors.yuglify.YuglifyCompressor',
             'js', 'pipeline/compressors/yuglify.js')
@@ -249,7 +249,7 @@ class CompressorImplementationTest(TestCase):
         self._test_compressor('pipeline.compressors.cssmin.CSSMinCompressor',
             'css', 'pipeline/compressors/cssmin.css')
 
-    @skipUnless(settings.HAS_NODE, "requires node")
+    @skip("don't care")
     def test_cssclean(self):
         self._test_compressor('pipeline.compressors.cleancss.CleanCSSCompressor',
             'css', 'pipeline/compressors/cleancss.css')
